@@ -3,67 +3,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class CategoriaController extends Controller
 {
-    // Mostrar lista de categorías
-    public function index()
+    public function create()
     {
-        $categorias = Categoria::paginate(10);
-        return view('categorias.list', compact('categorias')); 
+        $categorias = Categoria::all();   
+        return view('categorias.create', compact('categorias'));
     }
 
-    // Mostrar una categoría específica
-    public function show($id)
-    {
-        $categoria = Categoria::findOrFail($id);
-        return view('categorias.list', compact('categoria')); 
-    }
-
-    public function create(): View
-    {
-        return view('categorias.form');
-    }
-
-    // Almacenar una nueva categoría
     public function store(Request $request)
     {
+
         $request->validate([
-            'nombre' => 'required',
+            'nombre' => 'required|string|max:255|unique:categorias',
         ]);
 
-        Categoria::create($request->all());
 
-        return redirect()->route('categorias.index')->with('success', 'Categoría creada exitosamente.');
-    }
-
-    // Editar una categoría (solo administradores)
-    public function edit($id)
-    {
-        $categoria = Categoria::findOrFail($id);
-        return view('categorias.form', compact('categoria'));
-    }
-
-    // Actualizar una categoría
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'nombre' => 'required',
+        Categoria::create([
+            'nombre' => $request->nombre,
         ]);
 
-        $categoria = Categoria::findOrFail($id);
-        $categoria->update($request->all());
-
-        return redirect()->route('categorias.index')->with('success', 'Categoría actualizada exitosamente.');
+        return redirect()->route('libros.create')->with('success', 'Categoría creada correctamente');
     }
 
-    // Eliminar una categoría (solo administradores)
     public function destroy($id)
-    {
-        $categoria = Categoria::findOrFail($id);
-        $categoria->delete();
+{
+    $categoria = Categoria::findOrFail($id);
+    $categoria->delete();
 
-        return redirect()->route('categorias.index')->with('success', 'Categoría eliminada exitosamente.');
-    }
+    return redirect()->route('categorias.create')->with('success', 'Categoría eliminada correctamente.');
+}
 }

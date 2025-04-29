@@ -19,6 +19,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        
+    \Blade::if('role', function ($role) {
+        return auth()->check() && auth()->user()->hasRole($role);
+    });
+
+    \Blade::if('permission', function ($permission) {
+        return auth()->check() && auth()->user()->can($permission);
+    });
     }
 }

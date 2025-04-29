@@ -30,4 +30,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function libros()
+    {
+        return $this->hasMany(Libro::class);
+    }
 }

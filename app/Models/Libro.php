@@ -9,7 +9,7 @@ class Libro extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titulo', 'autor_id', 'descripcion'];
+    protected $fillable = ['titulo', 'autor_id', 'descripcion', 'user_id'];
 
     // Relación con Autor (1 a muchos)
     public function autor()
@@ -21,5 +21,10 @@ class Libro extends Model
     public function categorias()
     {
         return $this->belongsToMany(Categoria::class, 'categoria_libro');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
