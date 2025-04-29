@@ -1,30 +1,29 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CategoriaController extends Controller
 {
     // Mostrar lista de categorías
     public function index()
     {
-        $categorias = Categoria::all();
-        return view('categorias.index', compact('categorias'));
+        $categorias = Categoria::paginate(10);
+        return view('categorias.list', compact('categorias')); 
     }
 
     // Mostrar una categoría específica
     public function show($id)
     {
         $categoria = Categoria::findOrFail($id);
-        return view('categorias.show', compact('categoria'));
+        return view('categorias.list', compact('categoria')); 
     }
 
-    // Crear una nueva categoría (solo administradores)
-    public function create()
+    public function create(): View
     {
-        return view('categorias.create');
+        return view('categorias.form');
     }
 
     // Almacenar una nueva categoría
@@ -43,7 +42,7 @@ class CategoriaController extends Controller
     public function edit($id)
     {
         $categoria = Categoria::findOrFail($id);
-        return view('categorias.edit', compact('categoria'));
+        return view('categorias.form', compact('categoria'));
     }
 
     // Actualizar una categoría
